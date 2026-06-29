@@ -7,6 +7,7 @@ export const theme = {
     border: '#2A2A2E',
     text: '#FFFFFF',
     textMuted: '#9A9AA2',
+    faint: '#5A5A62',
     accent: '#FFFFFF',
     onAccent: '#0B0B0C',
     goal: '#4ADE80',
@@ -36,7 +37,7 @@ export const STAT_META: Record<
   assists: {
     label: 'Assists',
     short: 'A',
-    emoji: '🎯',
+    emoji: '🤝',
     color: theme.colors.assist,
   },
   manOfTheMatch: {
@@ -48,13 +49,13 @@ export const STAT_META: Record<
   yellowCards: {
     label: 'Yellow Cards',
     short: 'YC',
-    emoji: '🟨',
+    emoji: '🟡',
     color: theme.colors.yellow,
   },
   redCards: {
     label: 'Red Cards',
     short: 'RC',
-    emoji: '🟥',
+    emoji: '🔴',
     color: theme.colors.red,
   },
   appearances: {

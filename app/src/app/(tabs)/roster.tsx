@@ -12,16 +12,28 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, ApiError, Player } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
 import { theme } from '@/lib/theme';
-import { Avatar, Button, Card, EmptyState, Field } from '@/components/ui';
+import { JerseyTile } from '@/components/kit';
+import { Button, Card, EmptyState, Field } from '@/components/ui';
+
+function initials(name: string) {
+  return name
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+}
 
 export default function RosterScreen() {
   const { data, error, loading, reload } = useApi<Player[]>(() =>
     api.getPlayers(),
   );
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState('');
@@ -68,7 +80,9 @@ export default function RosterScreen() {
       <FlatList
         data={data ?? []}
         keyExtractor={(p) => p._id}
-        contentContainerStyle={styles.list}
+        numColumns={2}
+        columnWrapperStyle={styles.colWrap}
+        contentContainerStyle={[styles.list, { paddingTop: insets.top + 12 }]}
         refreshControl={
           <RefreshControl
             refreshing={loading}
@@ -77,7 +91,8 @@ export default function RosterScreen() {
           />
         }
         ListHeaderComponent={
-          <View style={{ marginBottom: 14 }}>
+          <View style={{ marginBottom: 16 }}>
+            <Text style={styles.title}>SQUAD</Text>
             {adding ? (
               <Card style={{ gap: 12 }}>
                 <Field
@@ -133,17 +148,16 @@ export default function RosterScreen() {
         renderItem={({ item }) => (
           <Pressable
             onPress={() => router.push(`/player/${item._id}`)}
-            style={({ pressed }) => [styles.row, pressed && { opacity: 0.6 }]}>
-            <Avatar name={item.name} />
-            <View style={{ flex: 1 }}>
-              <Text style={styles.name}>{item.name}</Text>
-              {item.position ? (
-                <Text style={styles.sub}>{item.position}</Text>
-              ) : null}
+            style={({ pressed }) => [styles.cell, pressed && { borderColor: theme.colors.textMuted }]}>
+            <JerseyTile number={item.jerseyNumber} size={40} radius={10} />
+            <View>
+              <Text style={styles.name} numberOfLines={1}>
+                {item.name}
+              </Text>
+              <Text style={styles.sub}>
+                {[item.position, initials(item.name)].filter(Boolean).join(' · ')}
+              </Text>
             </View>
-            {item.jerseyNumber != null ? (
-              <Text style={styles.jersey}>#{item.jerseyNumber}</Text>
-            ) : null}
           </Pressable>
         )}
       />
@@ -153,18 +167,37 @@ export default function RosterScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.bg },
-  list: { padding: 16, paddingBottom: 32, gap: 10 },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  list: { padding: 20, paddingBottom: 32 },
+  title: {
+    color: theme.colors.text,
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+    marginBottom: 14,
+  },
+  colWrap: { gap: 10 },
+  cell: {
+    flex: 1,
     gap: 12,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
+    borderRadius: theme.radius.md,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    padding: 12,
+    padding: 14,
+    marginBottom: 10,
   },
-  name: { color: theme.colors.text, fontSize: 16, fontWeight: '700' },
-  sub: { color: theme.colors.textMuted, fontSize: 13, marginTop: 2 },
-  jersey: { color: theme.colors.textMuted, fontSize: 18, fontWeight: '800' },
+  name: {
+    color: theme.colors.text,
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  sub: {
+    color: theme.colors.faint,
+    fontSize: 11,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginTop: 3,
+  },
 });

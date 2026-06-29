@@ -8,10 +8,12 @@ import {
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api, ApiError, Match, Player } from '@/lib/api';
 import { useApi } from '@/lib/useApi';
 import { theme } from '@/lib/theme';
 import { Button, Card, EmptyState, Field, Stepper, Toggle } from '@/components/ui';
+import { CardChip, StatDot } from '@/components/kit';
 
 const EMPTY = {
   goals: 0,
@@ -23,6 +25,7 @@ const EMPTY = {
 
 export default function AddStatsScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const players = useApi<Player[]>(() => api.getPlayers());
   const matches = useApi<Match[]>(() => api.getMatches());
 
@@ -104,28 +107,24 @@ export default function AddStatsScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: insets.top + 12 }]}
       keyboardShouldPersistTaps="handled">
+      <Text style={styles.title}>LOG A MATCH</Text>
+
       <Text style={styles.section}>Player</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chips}>
+      <View style={styles.chips}>
         {players.data.map((p) => (
           <Chip
             key={p._id}
-            label={p.name}
+            label={p.name.split(' ')[0]}
             active={playerId === p._id}
             onPress={() => setPlayerId(p._id)}
           />
         ))}
-      </ScrollView>
+      </View>
 
       <Text style={styles.section}>Match (optional)</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.chips}>
+      <View style={styles.chips}>
         <Chip label="No match" active={!matchId} onPress={() => setMatchId(null)} />
         {(matches.data ?? []).map((m) => (
           <Chip
@@ -135,9 +134,9 @@ export default function AddStatsScreen() {
             onPress={() => setMatchId(m._id)}
           />
         ))}
-      </ScrollView>
+      </View>
       <View style={styles.newMatch}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, minWidth: 0 }}>
           <Field
             placeholder="New opponent…"
             value={newOpponent}
@@ -158,32 +157,32 @@ export default function AddStatsScreen() {
       <Card style={{ gap: 10 }}>
         <Stepper
           label="Goals"
-          emoji="⚽"
+          indicator={<StatDot color={theme.colors.goal} />}
           value={form.goals}
           onChange={(v) => set('goals', v)}
         />
         <Stepper
           label="Assists"
-          emoji="🎯"
+          indicator={<StatDot color={theme.colors.assist} />}
           value={form.assists}
           onChange={(v) => set('assists', v)}
         />
         <Toggle
-          label="Man of the Match"
-          emoji="⭐"
+          label="Man of the match"
+          indicator={<StatDot color={theme.colors.motm} />}
           value={form.manOfTheMatch}
           onChange={(v) => set('manOfTheMatch', v)}
         />
         <Stepper
-          label="Yellow cards"
-          emoji="🟨"
+          label="Yellow card"
+          indicator={<CardChip color={theme.colors.yellow} />}
           value={form.yellowCards}
           onChange={(v) => set('yellowCards', v)}
           max={10}
         />
         <Stepper
-          label="Red cards"
-          emoji="🟥"
+          label="Red card"
+          indicator={<CardChip color={theme.colors.red} />}
           value={form.redCards}
           onChange={(v) => set('redCards', v)}
           max={5}
@@ -228,28 +227,35 @@ function Chip({
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.bg },
-  content: { padding: 16, paddingBottom: 48 },
+  content: { padding: 20, paddingBottom: 48 },
+  title: {
+    color: theme.colors.text,
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
   section: {
     color: theme.colors.textMuted,
-    fontSize: 13,
+    fontSize: 11,
     fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginTop: 18,
-    marginBottom: 8,
+    letterSpacing: 2,
+    marginTop: 22,
+    marginBottom: 10,
     marginLeft: 2,
   },
-  chips: { gap: 8, paddingRight: 8 },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: theme.radius.pill,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
   chipActive: { backgroundColor: theme.colors.accent, borderColor: theme.colors.accent },
-  chipText: { color: theme.colors.text, fontWeight: '600', fontSize: 14 },
+  chipText: { color: theme.colors.textMuted, fontWeight: '600', fontSize: 13 },
   chipTextActive: { color: theme.colors.onAccent },
   newMatch: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, marginTop: 10 },
 });

@@ -82,35 +82,46 @@ export function Field({
 
 export function Stepper({
   label,
-  emoji,
+  indicator,
   value,
   onChange,
   min = 0,
   max = 50,
+  compact = false,
 }: {
   label: string;
-  emoji: string;
+  indicator?: ReactNode;
   value: number;
   onChange: (v: number) => void;
   min?: number;
   max?: number;
+  compact?: boolean;
 }) {
   const set = (v: number) => onChange(Math.max(min, Math.min(max, v)));
   return (
-    <View style={styles.stepperRow}>
-      <Text style={styles.stepperLabel}>
-        {emoji}  {label}
-      </Text>
-      <View style={styles.stepperControls}>
+    <View style={[styles.stepperRow, compact && styles.stepperRowCompact]}>
+      <View style={styles.stepperLabelWrap}>
+        {indicator}
+        <Text style={styles.stepperLabel}>{label}</Text>
+      </View>
+      <View style={[styles.stepperControls, compact && styles.stepperControlsCompact]}>
         <Pressable
           onPress={() => set(value - 1)}
-          style={({ pressed }) => [styles.stepBtn, pressed && { opacity: 0.5 }]}>
+          style={({ pressed }) => [
+            styles.stepBtn,
+            compact && styles.stepBtnCompact,
+            pressed && { opacity: 0.5 },
+          ]}>
           <Text style={styles.stepBtnText}>−</Text>
         </Pressable>
-        <Text style={styles.stepValue}>{value}</Text>
+        <Text style={[styles.stepValue, compact && styles.stepValueCompact]}>{value}</Text>
         <Pressable
           onPress={() => set(value + 1)}
-          style={({ pressed }) => [styles.stepBtn, pressed && { opacity: 0.5 }]}>
+          style={({ pressed }) => [
+            styles.stepBtn,
+            compact && styles.stepBtnCompact,
+            pressed && { opacity: 0.5 },
+          ]}>
           <Text style={styles.stepBtnText}>+</Text>
         </Pressable>
       </View>
@@ -120,27 +131,26 @@ export function Stepper({
 
 export function Toggle({
   label,
-  emoji,
+  indicator,
   value,
   onChange,
 }: {
   label: string;
-  emoji: string;
+  indicator?: ReactNode;
   value: boolean;
   onChange: (v: boolean) => void;
 }) {
   return (
     <Pressable
       onPress={() => onChange(!value)}
-      style={({ pressed }) => [
-        styles.toggle,
-        value && styles.toggleOn,
-        pressed && { opacity: 0.7 },
-      ]}>
-      <Text style={[styles.stepperLabel, value && { color: theme.colors.onAccent }]}>
-        {emoji}  {label}
-      </Text>
-      <View style={[styles.toggleDot, value && styles.toggleDotOn]} />
+      style={({ pressed }) => [styles.toggle, pressed && { opacity: 0.7 }]}>
+      <View style={styles.stepperLabelWrap}>
+        {indicator}
+        <Text style={styles.stepperLabel}>{label}</Text>
+      </View>
+      <View style={[styles.toggleKnob, value && styles.toggleKnobOn]}>
+        <View style={[styles.toggleDot, value && styles.toggleDotOn]} />
+      </View>
     </Pressable>
   );
 }
@@ -214,6 +224,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 14,
     fontSize: 16,
+    minWidth: 0,
+    width: '100%',
   },
   stepperRow: {
     flexDirection: 'row',
@@ -226,8 +238,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.border,
   },
-  stepperLabel: { color: theme.colors.text, fontSize: 16, fontWeight: '600' },
+  stepperRowCompact: { paddingHorizontal: 10 },
+  stepperLabel: { color: theme.colors.text, fontSize: 15, fontWeight: '600' },
+  stepperLabelWrap: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   stepperControls: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  stepperControlsCompact: { gap: 6 },
   stepBtn: {
     width: 36,
     height: 36,
@@ -238,6 +253,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  stepBtnCompact: { width: 30, height: 30, borderRadius: 15 },
   stepBtnText: { color: theme.colors.text, fontSize: 22, fontWeight: '600', lineHeight: 24 },
   stepValue: {
     color: theme.colors.text,
@@ -246,6 +262,7 @@ const styles = StyleSheet.create({
     minWidth: 24,
     textAlign: 'center',
   },
+  stepValueCompact: { fontSize: 16, minWidth: 16 },
   toggle: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -258,17 +275,27 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
   },
   toggleOn: { backgroundColor: theme.colors.motm, borderColor: theme.colors.motm },
-  toggleDot: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    borderWidth: 2,
-    borderColor: theme.colors.textMuted,
+  toggleKnob: {
+    width: 44,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    padding: 2,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
   },
-  toggleDotOn: {
-    backgroundColor: theme.colors.onAccent,
+  toggleKnobOn: {
     borderColor: theme.colors.onAccent,
+    alignItems: 'flex-end',
   },
+  toggleDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: theme.colors.textMuted,
+  },
+  toggleDotOn: { backgroundColor: theme.colors.onAccent },
   empty: { alignItems: 'center', justifyContent: 'center', padding: 40, gap: 6 },
   emptyTitle: { color: theme.colors.text, fontSize: 17, fontWeight: '700' },
   emptySub: { color: theme.colors.textMuted, fontSize: 14, textAlign: 'center' },
