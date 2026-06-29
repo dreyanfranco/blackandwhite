@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { PlayersModule } from './players/players.module';
-import { MatchesModule } from './matches/matches.module';
-import { StatsModule } from './stats/stats.module';
+import { AppController } from '@/app.controller';
+import { PlayersModule } from '@/players/players.module';
+import { MatchesModule } from '@/matches/matches.module';
+import { StatsModule } from '@/stats/stats.module';
 
 @Module({
   imports: [

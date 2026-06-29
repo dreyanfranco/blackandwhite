@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MatchesService } from './matches.service';
-import { MatchesController } from './matches.controller';
-import { Match, MatchSchema } from './schemas/match.schema';
+import { MatchesService } from '@/matches/matches.service';
+import { MatchesController } from '@/matches/matches.controller';
+import { Match, MatchSchema } from '@/matches/schemas/match.schema';
 
 @Module({
   imports: [

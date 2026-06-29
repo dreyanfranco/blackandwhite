@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types, isValidObjectId } from 'mongoose';
-import { StatEntry, StatEntryDocument } from './schemas/stat-entry.schema';
-import { Player, PlayerDocument } from '../players/schemas/player.schema';
-import { Match, MatchDocument } from '../matches/schemas/match.schema';
-import { CreateStatDto } from './dto/create-stat.dto';
+import { StatEntry, StatEntryDocument } from '@/stats/schemas/stat-entry.schema';
+import { Player, PlayerDocument } from '@/players/schemas/player.schema';
+import { Match, MatchDocument } from '@/matches/schemas/match.schema';
+import { CreateStatDto } from '@/stats/dto/create-stat.dto';
 
 export type LeaderboardField =
   | 'goals'

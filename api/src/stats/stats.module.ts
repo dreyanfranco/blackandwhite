@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { StatsService } from './stats.service';
-import { StatsController } from './stats.controller';
-import { StatEntry, StatEntrySchema } from './schemas/stat-entry.schema';
-import { PlayersModule } from '../players/players.module';
-import { MatchesModule } from '../matches/matches.module';
+import { StatsService } from '@/stats/stats.service';
+import { StatsController } from '@/stats/stats.controller';
+import { StatEntry, StatEntrySchema } from '@/stats/schemas/stat-entry.schema';
+import { PlayersModule } from '@/players/players.module';
+import { MatchesModule } from '@/matches/matches.module';
 
 @Module({
   imports: [

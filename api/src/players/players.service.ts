@@ -5,14 +5,15 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
-import { Player, PlayerDocument } from './schemas/player.schema';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
+import { CreatePlayerDto } from '@/players/dto/create-player.dto';
+import { UpdatePlayerDto } from '@/players/dto/update-player.dto';
+import { Player, PlayerDocument } from '@/players/schemas/player.schema';
 
 @Injectable()
 export class PlayersService {
   constructor(
-    @InjectModel(Player.name) private readonly playerModel: Model<PlayerDocument>,
+    @InjectModel(Player.name)
+    private readonly playerModel: Model<PlayerDocument>,
   ) {}
 
   async create(dto: CreatePlayerDto): Promise<Player> {

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
-import { Match, MatchDocument } from './schemas/match.schema';
-import { CreateMatchDto } from './dto/create-match.dto';
+import { Match, MatchDocument } from '@/matches/schemas/match.schema';
+import { CreateMatchDto } from '@/matches/dto/create-match.dto';
 
 @Injectable()
 export class MatchesService {

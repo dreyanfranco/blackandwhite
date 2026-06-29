@@ -8,10 +8,10 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { PlayersService } from './players.service';
-import { CreatePlayerDto } from './dto/create-player.dto';
-import { UpdatePlayerDto } from './dto/update-player.dto';
-import { TeamPinGuard } from '../common/team-pin.guard';
+import { PlayersService } from '@/players/players.service';
+import { CreatePlayerDto } from '@/players/dto/create-player.dto';
+import { UpdatePlayerDto } from '@/players/dto/update-player.dto';
+import { TeamPinGuard } from '@/common/team-pin.guard';
 
 @Controller('players')
 export class PlayersController {

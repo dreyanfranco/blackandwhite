@@ -6,9 +6,9 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { MatchesService } from './matches.service';
-import { CreateMatchDto } from './dto/create-match.dto';
-import { TeamPinGuard } from '../common/team-pin.guard';
+import { MatchesService } from '@/matches/matches.service';
+import { CreateMatchDto } from '@/matches/dto/create-match.dto';
+import { TeamPinGuard } from '@/common/team-pin.guard';
 
 @Controller('matches')
 export class MatchesController {

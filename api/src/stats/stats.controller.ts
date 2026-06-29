@@ -8,10 +8,10 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { StatsService } from './stats.service';
-import type { LeaderboardField } from './stats.service';
-import { CreateStatDto } from './dto/create-stat.dto';
-import { TeamPinGuard } from '../common/team-pin.guard';
+import { StatsService } from '@/stats/stats.service';
+import type { LeaderboardField } from '@/stats/stats.service';
+import { CreateStatDto } from '@/stats/dto/create-stat.dto';
+import { TeamPinGuard } from '@/common/team-pin.guard';
 
 @Controller()
 export class StatsController {
